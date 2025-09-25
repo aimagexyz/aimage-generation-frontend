@@ -1,0 +1,64 @@
+---
+description: This rule details how User Interface (UI) components, layouts, and pages are organized within the project.
+alwaysApply: false
+---
+# Component and Page Structure
+
+This rule details how User Interface (UI) components, layouts, and pages are organized within the project.
+
+## Components
+
+-   **General UI Components**: Located in [src/components/ui/](mdc:src/components/ui), these are atomic, reusable UI elements (e.g., buttons, inputs, cards, etc.).
+-   **Feature Components**: Located in dedicated subdirectories inside [src/components/](mdc:src/components) (e.g., `aiReview`, `citations`), these components are specific to certain application features.
+-   **Layout Components**: Located in [src/components/layouts/](mdc:src/components/layouts), these define the overall structure of different parts of the application (e.g., `MainLayout`).
+    -   The `Sidebar` component is located in [src/components/layouts/MainLayout/Sidebar/](mdc:src/components/layouts/MainLayout/Sidebar).
+-   **Skeletons**: Placeholder components for loading states are located in [src/components/skeletons/](mdc:src/components/skeletons).
+
+## Pages
+
+-   The various pages or main views of the application are located in the [src/pages/](mdc:src/pages) directory.
+-   Each major functional module typically has its own subdirectory, for example:
+    -   `Account`: [src/pages/Account/](mdc:src/pages/Account)
+    -   `AdminDashboard`: [src/pages/AdminDashboard/](mdc:src/pages/AdminDashboard)
+    -   `CharactersPage`: [src/pages/CharactersPage/](mdc:src/pages/CharactersPage)
+    -   `ReviewPointsPage`: [src/pages/ReviewPointsPage/](mdc:src/pages/ReviewPointsPage)
+    -   `Tasks`: [src/pages/Tasks/](mdc:src/pages/Tasks)
+-   Sub-components or logic (e.g., Hooks) specific to a page are usually placed in that page's subdirectory, such as:
+    -   `AdminDashboard/hooks/`: [src/pages/AdminDashboard/hooks/](mdc:src/pages/AdminDashboard/hooks)
+    -   `Tasks/TaskDetail/Subtask/FrameAnnotation/`: [src/pages/Tasks/TaskDetail/Subtask/FrameAnnotation/](mdc:src/pages/Tasks/TaskDetail/Subtask/FrameAnnotation)
+
+## Styles
+
+-   Global styles may be defined in [src/index.css](mdc:src/index.css).
+-   Tailwind CSS is used for styling, and its configuration file is [tailwind.config.cjs](mdc:tailwind.config.cjs).
+-   `components.json` ([components.json](mdc:components.json)) may be related to UI libraries (like shadcn/ui).
+# Component and Page Structure
+
+This rule details how User Interface (UI) components, layouts, and pages are organized within the project.
+
+## Components
+
+-   **General UI Components**: Located in [src/components/ui/](mdc:src/components/ui), these are atomic, reusable UI elements (e.g., buttons, inputs, cards, etc.).
+-   **Feature Components**: Located in dedicated subdirectories inside [src/components/](mdc:src/components) (e.g., `aiReview`, `citations`), these components are specific to certain application features.
+-   **Layout Components**: Located in [src/components/layouts/](mdc:src/components/layouts), these define the overall structure of different parts of the application (e.g., `MainLayout`).
+    -   The `Sidebar` component is located in [src/components/layouts/MainLayout/Sidebar/](mdc:src/components/layouts/MainLayout/Sidebar).
+-   **Skeletons**: Placeholder components for loading states are located in [src/components/skeletons/](mdc:src/components/skeletons).
+
+## Pages
+
+-   The various pages or main views of the application are located in the [src/pages/](mdc:src/pages) directory.
+-   Each major functional module typically has its own subdirectory, for example:
+    -   `Account`: [src/pages/Account/](mdc:src/pages/Account)
+    -   `AdminDashboard`: [src/pages/AdminDashboard/](mdc:src/pages/AdminDashboard)
+    -   `CharactersPage`: [src/pages/CharactersPage/](mdc:src/pages/CharactersPage)
+    -   `ReviewPointsPage`: [src/pages/ReviewPointsPage/](mdc:src/pages/ReviewPointsPage)
+    -   `Tasks`: [src/pages/Tasks/](mdc:src/pages/Tasks)
+-   Sub-components or logic (e.g., Hooks) specific to a page are usually placed in that page's subdirectory, such as:
+    -   `AdminDashboard/hooks/`: [src/pages/AdminDashboard/hooks/](mdc:src/pages/AdminDashboard/hooks)
+    -   `Tasks/TaskDetail/Subtask/FrameAnnotation/`: [src/pages/Tasks/TaskDetail/Subtask/FrameAnnotation/](mdc:src/pages/Tasks/TaskDetail/Subtask/FrameAnnotation)
+
+## Styles
+
+-   Global styles may be defined in [src/index.css](mdc:src/index.css).
+-   Tailwind CSS is used for styling, and its configuration file is [tailwind.config.cjs](mdc:tailwind.config.cjs).
+-   `components.json` ([components.json](mdc:components.json)) may be related to UI libraries (like shadcn/ui).

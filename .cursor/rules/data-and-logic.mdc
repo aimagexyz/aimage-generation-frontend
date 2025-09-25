@@ -1,0 +1,36 @@
+---
+description: Data Flow and Logic: This rule outlines the locations for data processing, API interaction, state management, and general logic within the project.
+globs: 
+alwaysApply: false
+---
+# Data Flow and Logic
+
+This rule outlines the locations for data processing, API interaction, state management, and general logic within the project.
+
+## API Communication
+
+-   **API Definition**: The OpenAPI specification is located in [openapi.json](mdc:openapi.json), which defines the contract for the backend API.
+-   **API Call Logic**: Code for interacting with the backend API is typically placed in the [src/api/](mdc:src/api) directory. This may include API client instantiation, request functions, etc.
+
+## State Management and Custom Hooks
+
+-   **Custom Hooks**: Reusable React Hooks are located in the [src/hooks/](mdc:src/hooks) directory. These Hooks might encapsulate state logic, side effects, or context access.
+-   **Page-Specific Hooks**: Some Hooks may be specific to a particular page or feature module and are located in that page's subdirectory, e.g., [src/pages/AdminDashboard/hooks/](mdc:src/pages/AdminDashboard/hooks).
+-   **Query Management**: The [src/queryClient.ts](mdc:src/queryClient.ts) file suggests that a library like React Query (TanStack Query) might be used for managing server state, caching, and data synchronization.
+
+## Services
+
+-   **Business Logic**: The [src/services/](mdc:src/services) directory may contain higher-level services that encapsulate specific business logic or coordinate multiple API calls and data transformations.
+
+## Utilities
+
+-   **General Utilities**: The [src/utils/](mdc:src/utils) directory stores reusable utility functions for the entire application, such as date formatting, string manipulation, validation, etc.
+
+## Type Definitions (Types)
+
+-   **TypeScript Types**: Global TypeScript type and interface definitions are in the [src/types/](mdc:src/types) directory.
+-   Environment-related type definitions can be found in [src/vite-env.d.ts](mdc:src/vite-env.d.ts) and [src/env.d.ts](mdc:src/env.d.ts).
+
+## Constants
+
+-   **Application Constants**: Hardcoded values or constants used throughout the application (like configuration keys, event names, etc.) should be defined in the [src/constants/](mdc:src/constants) directory.

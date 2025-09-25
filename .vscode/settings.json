@@ -1,0 +1,54 @@
+{
+  "editor.tabSize": 2,
+  // disable default validator
+  "css.validate": false,
+  "scss.validate": false,
+  // デフォルトのフォーマットの設定をOFFに
+  // https://tech-1natsu.hatenablog.com/entry/2018/11/10/231855
+  "editor.formatOnSave": true,
+  "eslint.useFlatConfig": true,
+  // フォーマッターの指定
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  // 言語別に設定
+  // https://qiita.com/mysticatea/items/3f306470e8262e50bb70
+  "[javascript]": {
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit"
+    }
+  },
+  "[typescript]": {
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit",
+      "source.fixAll.stylelint": "explicit"
+    }
+  },
+  "[typescriptreact]": {
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit",
+      "source.fixAll.stylelint": "explicit"
+    }
+  },
+  "[css]": {
+    "editor.codeActionsOnSave": {
+      "source.fixAll.stylelint": "explicit"
+    }
+  },
+  "[json]": {
+    "editor.formatOnSave": true
+  },
+  "[jsonc]": {
+    "editor.formatOnSave": true
+  },
+  "sonarlint.rules": {
+    "typescript:S6606": {
+      "level": "off"
+    }
+  },
+  "cSpell.words": ["aimage", "clsx", "FASTAPI", "Plyr"],
+  "editor.quickSuggestions": {
+    "strings": "on"
+  },
+  "files.associations": {
+    "*.css": "tailwindcss"
+  }
+}
