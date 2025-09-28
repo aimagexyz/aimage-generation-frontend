@@ -16,7 +16,7 @@ export function ChatPanelFooter({ onOpenStructuredModal }: ChatPanelFooterProps)
     handleGenerate,
     handleRemoveSelection,
     promptImages,
-    addPromptImageUrls,
+    addPromptImages,
     removePromptImage,
     clearPromptImages,
   } = useImageGenContext();
@@ -35,7 +35,7 @@ export function ChatPanelFooter({ onOpenStructuredModal }: ChatPanelFooterProps)
         detailedSettings={detailedSettings}
         onSettingsChange={setDetailedSettings}
         promptImages={promptImages}
-        onAddImages={addPromptImageUrls}
+        onAddImages={addPromptImages}
         onRemoveImage={removePromptImage}
         onClearImages={clearPromptImages}
       />

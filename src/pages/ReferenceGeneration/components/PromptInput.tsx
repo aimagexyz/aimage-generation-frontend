@@ -23,7 +23,7 @@ type PromptInputProps = {
   onSettingsChange: (settings: DetailedSettings) => void;
   // New: prompt image attachments
   promptImages: string[];
-  onAddImages: (urls: string[]) => void;
+  onAddImages: (files: File[] | FileList) => void;
   onRemoveImage: (index: number) => void;
   onClearImages: () => void;
 };
@@ -139,8 +139,7 @@ export function PromptInput({
     if (imageFiles.length === 0) {
       return;
     }
-    const urls = imageFiles.map((f) => URL.createObjectURL(f));
-    onAddImages(urls);
+    onAddImages(imageFiles);
   };
 
   const handlePaste: React.ClipboardEventHandler<HTMLTextAreaElement> = (e) => {

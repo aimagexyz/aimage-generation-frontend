@@ -51,6 +51,45 @@ export const referenceGenerationService = {
     });
     return response.data as GeneratedReferenceResponse[];
   },
+
+  /**
+   * Generate references from images (multipart form)
+   */
+  async generateReferencesFromImages(
+    projectId: string,
+    request: GenerateRequest,
+    files: File[],
+  ): Promise<GeneratedReferenceResponse[]> {
+    const form = new FormData();
+    form.append('base_prompt', request.base_prompt);
+    form.append('count', String(request.count));
+    form.append('aspect_ratio', request.aspect_ratio);
+    if (request.negative_prompt) {
+      form.append('negative_prompt', request.negative_prompt);
+    }
+    if (request.tags?.style) {
+      form.append('style', request.tags.style);
+    }
+    if (request.tags?.pose) {
+      form.append('pose', request.tags.pose);
+    }
+    if (request.tags?.camera) {
+      form.append('camera', request.tags.camera);
+    }
+    if (request.tags?.lighting) {
+      form.append('lighting', request.tags.lighting);
+    }
+
+    files.forEach((file) => form.append('images', file));
+
+    const response = await fetchApi({
+      url: `/api/v1/reference-generation/projects/${projectId}/generate-from-images` as UrlPaths,
+      method: 'post',
+      data: form,
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+    return response.data as GeneratedReferenceResponse[];
+  },
 };
 
 // Mapping functions to reduce complexity
@@ -96,7 +135,7 @@ const mapToCamera = (value: string): string => {
 // Helper function to map existing DetailedSettings to new API format
 export const mapSettingsToRequest = (
   basePrompt: string,
-  detailedSettings: { number_of_images: number; aspect_ratio: string },
+  detailedSettings: { number_of_images: number; aspect_ratio: string; },
   structuredSelections: Record<string, string>,
   negativePrompt?: string,
 ): GenerateRequest => {
