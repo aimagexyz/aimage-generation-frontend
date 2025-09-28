@@ -137,6 +137,7 @@ export function useImageGen() {
   const [generationQueue, setGenerationQueue] = useState<GenerationJob[]>([]);
   const [generationHistory, setGenerationHistory] = useState<Message[]>([]);
   const [promptImages, setPromptImages] = useState<string[]>([]);
+  const [promptImageFiles, setPromptImageFiles] = useState<File[]>([]);
 
   const abortControllerRef = useRef<AbortController | null>(null);
 
@@ -290,6 +291,7 @@ export function useImageGen() {
       setPrompt('');
       // Clear attached prompt images after submission (do not revoke to keep previews visible in conversation)
       setPromptImages([]);
+      setPromptImageFiles([]);
 
       // Create abort controller for this generation
       abortControllerRef.current = new AbortController();
@@ -303,7 +305,7 @@ export function useImageGen() {
         // Map structured selections to new API tags format
         const tags = mapStructuredSelectionsToTags(structuredSelections);
 
-        // Prepare request for new API
+        // Prepare request for API
         const request: GenerateRequest = {
           base_prompt: fullPrompt,
           tags,
@@ -312,11 +314,11 @@ export function useImageGen() {
           negative_prompt: detailedSettings.negative_prompt,
         };
 
-        // Call the new reference generation API
-        const response: GeneratedReferenceResponse[] = await referenceGenerationService.generateReferences(
-          currentProjectId,
-          request,
-        );
+        // Choose text-to-image or image-to-image based on attachments
+        const response: GeneratedReferenceResponse[] =
+          promptImageFiles.length > 0
+            ? await referenceGenerationService.generateReferencesFromImages(currentProjectId, request, promptImageFiles)
+            : await referenceGenerationService.generateReferences(currentProjectId, request);
 
         clearInterval(progressInterval);
 
@@ -327,8 +329,9 @@ export function useImageGen() {
 
         // Update job state
         updateJobState(jobId, 'completed', 100);
-      } catch (error: unknown) {
-        handleGenerationError(error, jobId);
+      } catch (_e) {
+        const err = _e as { name?: string; message?: string; };
+        handleGenerationError(err, jobId);
       } finally {
         setIsLoading(false);
         abortControllerRef.current = null;
@@ -352,6 +355,7 @@ export function useImageGen() {
       createResponseMessage,
       cleanupCompletedJob,
       promptImages,
+      promptImageFiles,
     ],
   );
 
@@ -453,6 +457,15 @@ export function useImageGen() {
       }
       setPromptImages((prev) => [...prev, ...urls]);
     }, []),
+    addPromptImages: useCallback((files: File[] | FileList) => {
+      const array = Array.from(files);
+      if (array.length === 0) {
+        return;
+      }
+      const urls = array.map((f) => URL.createObjectURL(f));
+      setPromptImages((prev) => [...prev, ...urls]);
+      setPromptImageFiles((prev) => [...prev, ...array]);
+    }, []),
     removePromptImage: useCallback((index: number) => {
       setPromptImages((prev) => {
         if (index < 0 || index >= prev.length) {
@@ -461,6 +474,12 @@ export function useImageGen() {
         const toRemove = prev[index];
         if (toRemove && toRemove.startsWith('blob:')) {
           URL.revokeObjectURL(toRemove);
+        }
+        return [...prev.slice(0, index), ...prev.slice(index + 1)];
+      });
+      setPromptImageFiles((prev) => {
+        if (index < 0 || index >= prev.length) {
+          return prev;
         }
         return [...prev.slice(0, index), ...prev.slice(index + 1)];
       });
@@ -474,6 +493,7 @@ export function useImageGen() {
         });
         return [];
       });
+      setPromptImageFiles([]);
     }, []),
 
     // Enhanced data
