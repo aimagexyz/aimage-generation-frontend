@@ -17,7 +17,7 @@ import { useImageGenContext } from '../contexts/ImageGenContext';
 
 interface ConversationEmptyStateProps {
   title?: string;
-  icon?: React.ComponentType<{ className?: string }>;
+  icon?: React.ComponentType<{ className?: string; }>;
   className?: string;
 }
 
@@ -72,7 +72,7 @@ function ConversationEmptyStateComponent({
   };
 
   return (
-    <div className={`flex flex-col items-center justify-center h-full px-8 py-12 text-center ${className}`}>
+    <div className={`flex flex-col items-center justify-center px-8 py-12 text-center ${className}`}>
       <div className="flex flex-col items-center gap-6 max-w-2xl">
         {/* Main Icon and Title */}
         <div className="flex flex-col items-center gap-4">

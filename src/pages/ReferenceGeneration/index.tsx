@@ -13,12 +13,12 @@ export default function ReferenceGenerationPage() {
 
   return (
     <ImageGenProvider value={imageGen}>
-      <div className="flex h-full flex-row overflow-hidden bg-gray-50 dark:bg-gray-950">
-        <div className="flex-1 flex flex-col min-w-0 p-4 md:p-6 lg:p-8">
+      <div className="flex h-full flex-row p-4 md:p-6 lg:p-8 gap-4 overflow-hidden bg-gray-50 dark:bg-gray-950">
+        <div className="flex-1 flex flex-col min-w-0">
           <ChatPanel onOpenStructuredModal={() => setIsStructuredModalOpen(true)} />
         </div>
 
-        <div className="hidden xl:flex flex-col w-[320px] 2xl:w-[400px] flex-shrink-0 p-4 pl-0">
+        <div className="flex flex-col w-[320px] 2xl:w-[400px] flex-shrink-0">
           <ReferenceGenerationLikedPanel className="h-full w-full" />
         </div>
       </div>
