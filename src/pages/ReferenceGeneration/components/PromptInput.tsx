@@ -194,7 +194,7 @@ export function PromptInput({
         onDrop={handleDrop}
       >
         <TextArea
-          placeholder="例：ジャンプしながら手を振るポーズ"
+          placeholder="プロンプトを入力するか、画像を添付してください"
           className={`min-h-[44px] resize-none rounded-lg bg-gray-50 p-3 pr-20 text-sm transition-all duration-200 dark:bg-gray-800 border-0 focus:border focus:border-purple-400 focus:bg-white dark:focus:bg-gray-900 ${isExpanded ? 'min-h-[88px]' : ''
             } ${showSuggestions ? 'border-2 border-purple-500' : ''}`}
           value={prompt}
@@ -309,7 +309,7 @@ export function PromptInput({
 
       {/* Compact controls row with tags dropdown */}
       <div className="flex items-center justify-between gap-2">
-        <div className="flex items-center gap-2 flex-1 min-w-0">
+        {(!promptImages || promptImages.length === 0) ? <div className="flex items-center gap-2 flex-1 min-w-0">
           <Button
             variant="outline"
             size="sm"
@@ -386,7 +386,7 @@ export function PromptInput({
               </DropdownMenuContent>
             </DropdownMenu>
           )}
-        </div>
+        </div> : <div className="flex items-center gap-2 flex-1 min-w-0" />}
 
         {/* Compact settings and status */}
         <div className="flex items-center gap-2 text-xs">
