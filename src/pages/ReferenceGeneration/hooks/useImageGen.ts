@@ -136,6 +136,7 @@ export function useImageGen() {
   );
   const [generationQueue, setGenerationQueue] = useState<GenerationJob[]>([]);
   const [generationHistory, setGenerationHistory] = useState<Message[]>([]);
+  const [promptImages, setPromptImages] = useState<string[]>([]);
 
   const abortControllerRef = useRef<AbortController | null>(null);
 
@@ -213,11 +214,12 @@ export function useImageGen() {
 
   // Extract message creation logic
   const createPromptMessage = useCallback(
-    (promptToSubmit: string, fullPrompt: string, jobId: string): Message => {
+    (promptToSubmit: string, fullPrompt: string, jobId: string, images?: string[]): Message => {
       return {
         id: Date.now(),
         type: 'prompt',
         text: promptToSubmit,
+        images: images && images.length > 0 ? images : undefined,
         metadata: {
           fullPrompt,
           settings: detailedSettings,
@@ -282,10 +284,12 @@ export function useImageGen() {
       const job = createGenerationJob(fullPrompt, jobId);
       setGenerationQueue((prev) => [...prev, job]);
 
-      const newPromptMessage = createPromptMessage(promptToSubmit, fullPrompt, jobId);
+      const newPromptMessage = createPromptMessage(promptToSubmit, fullPrompt, jobId, promptImages);
       setConversation((prev) => [...prev, newPromptMessage]);
       setIsLoading(true);
       setPrompt('');
+      // Clear attached prompt images after submission (do not revoke to keep previews visible in conversation)
+      setPromptImages([]);
 
       // Create abort controller for this generation
       abortControllerRef.current = new AbortController();
@@ -347,6 +351,7 @@ export function useImageGen() {
       handleGenerationError,
       createResponseMessage,
       cleanupCompletedJob,
+      promptImages,
     ],
   );
 
@@ -396,13 +401,13 @@ export function useImageGen() {
   const allImages = conversation.flatMap((msg) =>
     msg.images
       ? msg.images.map((img, index) => ({
-          src: img,
-          aspect_ratio: msg.aspect_ratio || '1:1',
-          messageId: msg.id,
-          timestamp: msg.metadata?.timestamp || Date.now(),
-          settings: msg.metadata?.settings || detailedSettings,
-          index,
-        }))
+        src: img,
+        aspect_ratio: msg.aspect_ratio || '1:1',
+        messageId: msg.id,
+        timestamp: msg.metadata?.timestamp || Date.now(),
+        settings: msg.metadata?.settings || detailedSettings,
+        index,
+      }))
       : [],
   );
 
@@ -434,6 +439,7 @@ export function useImageGen() {
     setDetailedSettings,
     structuredSelections,
     setStructuredSelections,
+    promptImages,
 
     // Enhanced actions
     handleGenerate,
@@ -441,6 +447,34 @@ export function useImageGen() {
     handleRemoveSelection,
     handleCancelGeneration,
     handleRegenerate,
+    addPromptImageUrls: useCallback((urls: string[]) => {
+      if (!urls || urls.length === 0) {
+        return;
+      }
+      setPromptImages((prev) => [...prev, ...urls]);
+    }, []),
+    removePromptImage: useCallback((index: number) => {
+      setPromptImages((prev) => {
+        if (index < 0 || index >= prev.length) {
+          return prev;
+        }
+        const toRemove = prev[index];
+        if (toRemove && toRemove.startsWith('blob:')) {
+          URL.revokeObjectURL(toRemove);
+        }
+        return [...prev.slice(0, index), ...prev.slice(index + 1)];
+      });
+    }, []),
+    clearPromptImages: useCallback(() => {
+      setPromptImages((prev) => {
+        prev.forEach((url) => {
+          if (url.startsWith('blob:')) {
+            URL.revokeObjectURL(url);
+          }
+        });
+        return [];
+      });
+    }, []),
 
     // Enhanced data
     allImages,

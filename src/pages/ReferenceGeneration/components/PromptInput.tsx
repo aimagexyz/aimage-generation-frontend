@@ -1,5 +1,5 @@
-import { ChevronDown, ImageIcon, Lightbulb, Loader2, Send, Settings, X } from 'lucide-react';
-import { useState } from 'react';
+import { ChevronDown, ImageIcon, ImagePlus, Lightbulb, Loader2, Send, Settings, X } from 'lucide-react';
+import { useRef, useState } from 'react';
 
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
@@ -21,6 +21,11 @@ type PromptInputProps = {
   onSelectionRemove: (selectionTitle: string) => void;
   detailedSettings: DetailedSettings;
   onSettingsChange: (settings: DetailedSettings) => void;
+  // New: prompt image attachments
+  promptImages: string[];
+  onAddImages: (urls: string[]) => void;
+  onRemoveImage: (index: number) => void;
+  onClearImages: () => void;
 };
 
 const PROMPT_SUGGESTIONS = [
@@ -76,9 +81,15 @@ export function PromptInput({
   onSelectionRemove,
   detailedSettings,
   onSettingsChange,
+  promptImages,
+  onAddImages,
+  onRemoveImage,
+  onClearImages,
 }: PromptInputProps) {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isDragOver, setIsDragOver] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -122,17 +133,75 @@ export function PromptInput({
 
   const hasContent = prompt.trim() || allTags.length > 0;
 
+  const processFiles = (files: FileList | File[]) => {
+    const array = Array.from(files);
+    const imageFiles = array.filter((f) => f.type.startsWith('image/'));
+    if (imageFiles.length === 0) {
+      return;
+    }
+    const urls = imageFiles.map((f) => URL.createObjectURL(f));
+    onAddImages(urls);
+  };
+
+  const handlePaste: React.ClipboardEventHandler<HTMLTextAreaElement> = (e) => {
+    const items = e.clipboardData?.items;
+    if (!items) {
+      return;
+    }
+    const files: File[] = [];
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i];
+      if (item.kind === 'file') {
+        const file = item.getAsFile();
+        if (file && file.type.startsWith('image/')) {
+          files.push(file);
+        }
+      }
+    }
+    if (files.length > 0) {
+      e.preventDefault();
+      processFiles(files);
+    }
+  };
+
+  const handleDragOver: React.DragEventHandler<HTMLDivElement> = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragOver(true);
+  };
+
+  const handleDragLeave: React.DragEventHandler<HTMLDivElement> = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragOver(false);
+  };
+
+  const handleDrop: React.DragEventHandler<HTMLDivElement> = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragOver(false);
+    const files = e.dataTransfer.files;
+    if (files && files.length > 0) {
+      processFiles(files);
+    }
+  };
+
   return (
     <div className="flex flex-col gap-2">
-      <div className="relative">
+      <div
+        className={`relative ${isDragOver ? 'ring-2 ring-purple-400 rounded-lg' : ''}`}
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+      >
         <TextArea
           placeholder="例：ジャンプしながら手を振るポーズ"
-          className={`min-h-[44px] resize-none rounded-lg bg-gray-50 p-3 pr-20 text-sm transition-all duration-200 dark:bg-gray-800 border-0 focus:border focus:border-purple-400 focus:bg-white dark:focus:bg-gray-900 ${
-            isExpanded ? 'min-h-[88px]' : ''
-          } ${showSuggestions ? 'border-2 border-purple-500' : ''}`}
+          className={`min-h-[44px] resize-none rounded-lg bg-gray-50 p-3 pr-20 text-sm transition-all duration-200 dark:bg-gray-800 border-0 focus:border focus:border-purple-400 focus:bg-white dark:focus:bg-gray-900 ${isExpanded ? 'min-h-[88px]' : ''
+            } ${showSuggestions ? 'border-2 border-purple-500' : ''}`}
           value={prompt}
           onChange={(e) => onPromptChange(e.target.value)}
           onKeyDown={handleKeyDown}
+          onPaste={handlePaste}
           onFocus={() => setIsExpanded(true)}
           onBlur={() => {
             setIsExpanded(false);
@@ -142,8 +211,34 @@ export function PromptInput({
           disabled={isLoading}
         />
 
+        {/* Hidden file input */}
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          multiple
+          className="hidden"
+          onChange={(e) => {
+            if (e.target.files && e.target.files.length > 0) {
+              processFiles(e.target.files);
+            }
+            // reset to allow reselecting same files
+            e.currentTarget.value = '';
+          }}
+        />
+
         {/* Compact floating action buttons */}
         <div className="absolute bottom-2 right-2 flex items-center gap-1">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="h-7 w-7 p-0"
+            disabled={isLoading}
+            onClick={() => fileInputRef.current?.click()}
+            title="画像を追加"
+          >
+            <ImagePlus className="h-3.5 w-3.5" />
+          </Button>
           <Button
             variant="ghost"
             size="sm"
@@ -189,6 +284,29 @@ export function PromptInput({
           </div>
         )}
       </div>
+
+      {/* Attached images preview */}
+      {promptImages && promptImages.length > 0 && (
+        <div className="flex items-center gap-2 overflow-x-auto pb-1">
+          <div className="flex items-center gap-2">
+            {promptImages.map((url, idx) => (
+              <div key={`${url}-${idx}`} className="relative group h-12 w-12 flex-shrink-0 rounded-md overflow-hidden border border-gray-200 dark:border-gray-700">
+                <img src={url} alt={`attached-${idx + 1}`} className="h-full w-full object-cover" />
+                <button
+                  className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-white text-gray-700 shadow border border-gray-200 opacity-0 group-hover:opacity-100 transition"
+                  onClick={() => onRemoveImage(idx)}
+                  aria-label="remove image"
+                >
+                  <X className="h-3 w-3 m-auto" />
+                </button>
+              </div>
+            ))}
+          </div>
+          <Button variant="ghost" size="sm" className="h-7 px-2 text-xs" onClick={onClearImages}>
+            画像をクリア
+          </Button>
+        </div>
+      )}
 
       {/* Compact controls row with tags dropdown */}
       <div className="flex items-center justify-between gap-2">

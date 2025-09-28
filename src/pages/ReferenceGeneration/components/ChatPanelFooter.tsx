@@ -15,6 +15,10 @@ export function ChatPanelFooter({ onOpenStructuredModal }: ChatPanelFooterProps)
     structuredSelections,
     handleGenerate,
     handleRemoveSelection,
+    promptImages,
+    addPromptImageUrls,
+    removePromptImage,
+    clearPromptImages,
   } = useImageGenContext();
   return (
     <div className="flex-shrink-0 p-4 border-t border-black/5 dark:border-white/5 bg-gray-50/50 dark:bg-gray-900/20">
@@ -30,6 +34,10 @@ export function ChatPanelFooter({ onOpenStructuredModal }: ChatPanelFooterProps)
         onSelectionRemove={handleRemoveSelection}
         detailedSettings={detailedSettings}
         onSettingsChange={setDetailedSettings}
+        promptImages={promptImages}
+        onAddImages={addPromptImageUrls}
+        onRemoveImage={removePromptImage}
+        onClearImages={clearPromptImages}
       />
     </div>
   );

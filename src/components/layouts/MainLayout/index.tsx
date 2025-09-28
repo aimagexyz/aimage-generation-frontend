@@ -8,18 +8,16 @@ import Header from './Header'; // Import Header
 export function MainLayout() {
   const { pathname } = useLocation();
 
-  // Check if we're on the reference generation page
-  const isReferenceGenerationPage = pathname.includes('/reference-generation');
 
   const fallbackElement = {}[pathname] || <Loading />;
 
   return (
     <div
-      className={`flex flex-col bg-background ${isReferenceGenerationPage ? 'h-screen overflow-hidden' : 'min-h-screen'}`}
+      className="flex flex-col bg-background h-svh overflow-hidden"
     >
       <Header />
       <main
-        className={`mx-auto w-full max-w-screen-2xl ${isReferenceGenerationPage ? 'flex-1 overflow-hidden' : 'flex-1 p-4 md:p-6 lg:p-8'}`}
+        className="w-full flex-1 overflow-hidden"
       >
         <Suspense fallback={fallbackElement}>
           <Outlet />
