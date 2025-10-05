@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "andrewmcodes.tailwindcss-extension-pack",
+    "esbenp.prettier-vscode",
+    "ambar.bundle-size",
+    "streetsidesoftware.code-spell-checker"
+  ]
+}

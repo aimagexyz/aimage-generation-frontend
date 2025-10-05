@@ -1,0 +1,29 @@
+---
+description: Project Overview: This project is a frontend application using Vite and likely React (based on the presence of `main.tsx` and `App.tsx`).
+globs: 
+alwaysApply: false
+---
+# Project Overview
+
+This project is a frontend application using Vite and likely React (based on the presence of `main.tsx` and `App.tsx`).
+
+## Main Entry Points
+
+-   **HTML Entry**: [index.html](mdc:index.html) is the main HTML file.
+-   **JavaScript/TypeScript Entry**: [src/main.tsx](mdc:src/main.tsx) is the TypeScript/React entry point for the application.
+-   **Root Component**: [src/App.tsx](mdc:src/App.tsx) is likely the root component of the application.
+
+## Top-Level Directory Structure
+
+-   `public/`: Stores static assets that are directly copied to the build output directory.
+-   `src/`: Contains all the source code for the application.
+    -   `src/api/`: For API requests and response handling.
+    -   `src/components/`: Contains reusable UI components.
+    -   `src/pages/`: Contains the various pages or views of the application.
+    -   `src/hooks/`: Stores custom React Hooks.
+    -   `src/services/`: May contain business logic services.
+    -   `src/types/`: TypeScript type definitions.
+    -   `src/utils/`: General utility functions.
+    -   `src/constants/`: Constants used in the application.
+-   `.github/`: GitHub-related configurations, such as workflows.
+-   `.vscode/`: VS Code editor-specific configurations.
