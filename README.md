@@ -1,4 +1,4 @@
-# Aimage Generation Frontend
+# AI Mage Generation Frontend
 
 This is the frontend for the Aimage Generation system, a web application for generating reference images with AI.
 
