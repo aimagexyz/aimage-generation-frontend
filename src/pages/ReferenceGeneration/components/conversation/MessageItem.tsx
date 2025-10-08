@@ -2,8 +2,6 @@ import { Bot, Image as ImageIcon, Tag, User } from 'lucide-react';
 import { memo } from 'react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar';
-import { LikeButton } from '@/components/ui/LikeButton';
-import { inferSourceInfoFromConversation } from '@/utils/imageSourceUtils';
 
 import { type Message } from '../../types';
 import { AnimatedImage } from '../AnimatedImage';
@@ -73,9 +71,7 @@ function MessageItemComponent({
           {message.images && (
             <div className="mt-4 space-y-3">
               <div className={`grid gap-3 ${getGridLayout(message.images?.length || 0)}`}>
-                {message.images?.map((img, i) => {
-                  const sourceInfo = inferSourceInfoFromConversation(img, message.id, message.metadata);
-                  return (
+                {message.images?.map((img, i) => (
                     <div
                       key={i}
                       className={`relative overflow-hidden transition-all duration-200 shadow-md group/image rounded-xl hover:shadow-xl bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-700 ${
@@ -91,20 +87,8 @@ function MessageItemComponent({
                           </div>
                         </div>
                       )}
-                      {enableImageInteractions && (
-                        <div className="absolute top-2 right-2 z-20" onClick={(e) => e.stopPropagation()}>
-                          <LikeButton
-                            imageUrl={img}
-                            sourceInfo={sourceInfo || undefined}
-                            size="sm"
-                            variant="floating"
-                            className="h-7 w-7 shadow-lg backdrop-blur-sm"
-                          />
-                        </div>
-                      )}
                     </div>
-                  );
-                })}
+                ))}
               </div>
               {showTimestamps && (
                 <div className="flex flex-wrap items-center justify-between gap-2">

@@ -45,7 +45,7 @@ export default function HomePage() {
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400">AI Mage</span>
               <br />
               <br />
-              監修システム
+              参考図生成システム
             </h1>
           </div>
         </div>

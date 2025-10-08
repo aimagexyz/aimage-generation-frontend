@@ -2,7 +2,6 @@ import { useState } from 'react';
 
 import { ChatPanel } from './components/ChatPanel';
 import { StructuredInstructionModal } from './components/modals/StructuredInstructionModal';
-import { ReferenceGenerationLikedPanel } from './components/ReferenceGenerationLikedPanel';
 import { ImageGenProvider } from './contexts/ImageGenContext';
 import { useImageGen } from './hooks/useImageGen';
 
@@ -18,9 +17,6 @@ export default function ReferenceGenerationPage() {
           <ChatPanel onOpenStructuredModal={() => setIsStructuredModalOpen(true)} />
         </div>
 
-        <div className="flex flex-col w-[320px] 2xl:w-[400px] flex-shrink-0">
-          <ReferenceGenerationLikedPanel className="h-full w-full" />
-        </div>
       </div>
 
       <StructuredInstructionModal

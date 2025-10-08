@@ -1,17 +1,14 @@
-import { Bot, Check, Clock, Copy, Image as ImageIcon, Loader2, RefreshCw, Tag, User } from 'lucide-react';
+import { Bot, Clock, Image as ImageIcon, Loader2, RefreshCw, Tag, User } from 'lucide-react';
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
-import { LikeButton } from '@/components/ui/LikeButton';
 import { toast } from '@/components/ui/use-toast';
-import { inferSourceInfoFromConversation } from '@/utils/imageSourceUtils';
 
 import { useImageGenContext } from '../contexts/ImageGenContext';
-import { type ImageDetailData, type Message } from '../types';
+import { type Message } from '../types';
 import { AnimatedImage } from './AnimatedImage';
-import { UnifiedImageDetailModal } from './LikedImageDetailModal';
 
 /**
  * ConversationLayout Component
@@ -32,25 +29,23 @@ type ScrollBehavior = 'auto' | 'smooth';
 type Size = 'sm' | 'md' | 'lg';
 
 interface ConversationLayoutProps {
-  children?: React.ReactNode; // No longer the primary content source, but kept for flexibility
-  isEmpty?: boolean;
-  emptyState?: React.ReactNode;
-  className?: string;
-  scrollBehavior?: ScrollBehavior;
-  padding?: Size;
-  spacing?: Size;
-  autoScroll?: boolean;
-  scrollDependencies?: readonly unknown[];
-  ariaLabel?: string;
-  role?: string;
+  readonly isEmpty?: boolean;
+  readonly emptyState?: React.ReactNode;
+  readonly className?: string;
+  readonly scrollBehavior?: ScrollBehavior;
+  readonly padding?: Size;
+  readonly spacing?: Size;
+  readonly autoScroll?: boolean;
+  readonly scrollDependencies?: readonly unknown[];
+  readonly ariaLabel?: string;
+  readonly role?: string;
 
   // Merged from ConversationRenderer
-  conversation: Message[];
-  isLoading: boolean;
-  isTyping?: boolean;
-  retryCount?: number;
-  showTimestamps?: boolean;
-  enableImageInteractions?: boolean;
+  readonly conversation: Message[];
+  readonly isLoading: boolean;
+  readonly isTyping?: boolean;
+  readonly retryCount?: number;
+  readonly showTimestamps?: boolean;
 }
 
 /**
@@ -105,47 +100,6 @@ const TypingIndicator = memo(() => {
   );
 });
 TypingIndicator.displayName = 'TypingIndicator';
-
-const CopyButton = memo(({ text, size = 'sm' }: { text: string; size?: 'sm' | 'xs' }) => {
-  const [copied, setCopied] = useState(false);
-
-  const handleCopy = useCallback(() => {
-    navigator.clipboard
-      .writeText(text)
-      .then(() => {
-        setCopied(true);
-        toast({
-          title: 'コピーしました',
-          description: 'テキストがクリップボードにコピーされました',
-          duration: 2000,
-        });
-        setTimeout(() => setCopied(false), 2000);
-      })
-      .catch(() => {
-        toast({
-          title: 'エラー',
-          description: 'コピーに失敗しました',
-          variant: 'destructive',
-          duration: 2000,
-        });
-      });
-  }, [text]);
-
-  return (
-    <Button
-      size={size}
-      variant="ghost"
-      className={`h-8 w-8 p-0 transition-all duration-200 ${
-        copied ? 'text-green-600 bg-green-50 dark:bg-green-900/20' : 'hover:bg-slate-100 dark:hover:bg-slate-700'
-      }`}
-      onClick={handleCopy}
-      aria-label="テキストをコピー"
-    >
-      {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-    </Button>
-  );
-});
-CopyButton.displayName = 'CopyButton';
 
 const RegenerateButton = memo(
   ({
@@ -247,22 +201,17 @@ const MessageItem = memo(
   ({
     message,
     getGridLayout,
-    handleImageClick,
     showTimestamps,
-    enableImageInteractions,
     onRegenerate,
   }: {
     message: Message;
     getGridLayout: (count: number) => string;
-    handleImageClick: (imageUrl: string, message: Message, imageIndex: number) => void;
     showTimestamps: boolean;
-    enableImageInteractions: boolean;
     onRegenerate: (messageId: number) => Promise<void>;
   }) => (
     <article
       key={message.id}
       className={`flex flex-col gap-2 group ${message.type === 'prompt' ? 'items-end' : 'items-start'}`}
-      role="article"
       aria-label={`${message.type === 'prompt' ? 'ユーザー' : 'AI'}のメッセージ`}
     >
       <div
@@ -324,38 +273,9 @@ const MessageItem = memo(
           {message.images && (
             <div className="mt-4 space-y-3">
               <div className={`grid gap-3 ${getGridLayout(message.images?.length || 0)}`}>
-                {message.images?.map((img, i) => {
-                  const sourceInfo = inferSourceInfoFromConversation(img, message.id, message.metadata);
-                  return (
-                    <div
-                      key={i}
-                      className={`relative overflow-hidden transition-all duration-200 shadow-md group/image rounded-xl hover:shadow-xl bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-700 ${
-                        enableImageInteractions ? 'cursor-pointer hover:scale-105' : ''
-                      }`}
-                      onClick={() => handleImageClick(img, message, i)}
-                    >
-                      <AnimatedImage src={img} alt={`Generated image ${i + 1}`} aspectRatio={message.aspect_ratio} />
-                      {enableImageInteractions && (
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover/image:opacity-100 transition-all duration-200 rounded-xl z-10 flex items-center justify-center">
-                          <div className="bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm rounded-lg px-3 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 shadow-lg">
-                            詳細表示
-                          </div>
-                        </div>
-                      )}
-                      {enableImageInteractions && (
-                        <div className="absolute top-2 right-2 z-20" onClick={(e) => e.stopPropagation()}>
-                          <LikeButton
-                            imageUrl={img}
-                            sourceInfo={sourceInfo || undefined}
-                            size="sm"
-                            variant="floating"
-                            className="h-7 w-7 shadow-lg backdrop-blur-sm"
-                          />
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
+                {message.images?.map((img, i) => (
+                    <AnimatedImage key={i} src={img} alt={`Generated image ${i + 1}`} aspectRatio={message.aspect_ratio} />
+                ))}
               </div>
               {showTimestamps && (
                 <div className="flex flex-wrap items-center justify-between gap-2">
@@ -408,10 +328,8 @@ function ConversationLayoutComponent({
   isTyping = false,
   retryCount = 0,
   showTimestamps = true,
-  enableImageInteractions = true,
 }: ConversationLayoutProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
-  const [selectedImageData, setSelectedImageData] = useState<ImageDetailData | null>(null);
 
   // Memoize layout classes to prevent unnecessary recalculations
   const layoutClasses = useMemo(
@@ -425,40 +343,6 @@ function ConversationLayoutComponent({
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [autoScroll, scrollDependencies]);
-
-  const convertConversationImageToDetail = useCallback(
-    (imageUrl: string, message: Message, imageIndex: number): ImageDetailData => {
-      const generatedRef = message.metadata?.generatedReferences?.[imageIndex];
-      const timestamp = message.metadata?.timestamp
-        ? new Date(message.metadata.timestamp).toISOString()
-        : new Date().toISOString();
-
-      return {
-        image_url: imageUrl,
-        image_path: generatedRef?.image_path,
-        display_name:
-          generatedRef?.base_prompt || (generatedRef ? `生成画像 ${imageIndex + 1}` : `会話画像 ${imageIndex + 1}`),
-        source_type: 'conversation',
-        source_id: generatedRef?.id,
-        created_at: timestamp,
-        base_prompt: generatedRef?.base_prompt,
-        enhanced_prompt: generatedRef?.enhanced_prompt,
-        generation_time: message.metadata?.generationTime,
-        settings: message.metadata?.settings,
-      };
-    },
-    [],
-  );
-
-  const handleImageClick = useCallback(
-    (imageUrl: string, message: Message, imageIndex: number) => {
-      if (enableImageInteractions) {
-        const imageDetailData = convertConversationImageToDetail(imageUrl, message, imageIndex);
-        setSelectedImageData(imageDetailData);
-      }
-    },
-    [convertConversationImageToDetail, enableImageInteractions],
-  );
 
   const getGridLayout = useCallback((imageCount: number): string => {
     switch (imageCount) {
@@ -488,9 +372,7 @@ function ConversationLayoutComponent({
             key={message.id}
             message={message}
             getGridLayout={getGridLayout}
-            handleImageClick={handleImageClick}
             showTimestamps={showTimestamps}
-            enableImageInteractions={enableImageInteractions}
             onRegenerate={handleRegenerate}
           />
         ))}
@@ -535,15 +417,8 @@ function ConversationLayoutComponent({
   };
 
   return (
-    <div ref={scrollRef} className={layoutClasses} role={role} aria-label={ariaLabel} tabIndex={0}>
+    <div ref={scrollRef} className={layoutClasses} role={role} aria-label={ariaLabel}>
       {renderContent()}
-      {enableImageInteractions && (
-        <UnifiedImageDetailModal
-          imageData={selectedImageData}
-          isOpen={!!selectedImageData}
-          onClose={() => setSelectedImageData(null)}
-        />
-      )}
     </div>
   );
 }
