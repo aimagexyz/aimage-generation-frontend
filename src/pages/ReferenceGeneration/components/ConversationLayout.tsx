@@ -137,7 +137,7 @@ const RegenerateButton = memo(
 
     return (
       <Button
-        size={size}
+        size={size === 'xs' ? 'sm' : size}
         variant="ghost"
         className={`h-8 w-8 p-0 transition-all duration-200 ${
           isRegenerating

@@ -5,7 +5,7 @@ interface AccessibilityHelperProps {
   onClose?: () => void;
 }
 
-export function AccessibilityHelper({ isActive, onClose: _onClose }: AccessibilityHelperProps) {
+export function AccessibilityHelper({ isActive }: AccessibilityHelperProps) {
   const [showHelp, setShowHelp] = useState(false);
 
   useEffect(() => {

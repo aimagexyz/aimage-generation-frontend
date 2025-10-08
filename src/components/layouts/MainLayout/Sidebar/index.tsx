@@ -125,9 +125,9 @@ export default function Sidebar() {
                   )}
                   {!isSidebarCollapsed && !isSidebarCollapsedDebounced && (
                     <Button
-                      size="xs"
+                      size="sm"
                       variant="ghost"
-                      className="text-destructive p-0 m-0"
+                      className="text-destructive p-0 m-0 h-8"
                       onClick={(e) => {
                         e.stopPropagation();
                         e.preventDefault();

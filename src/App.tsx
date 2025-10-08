@@ -17,6 +17,7 @@ import { queryClient } from './queryClient';
 
 const AccountPage = lazy(() => import('@/pages/Account'));
 const NotFound = lazy(() => import('@/pages/NotFound'));
+const GeneratedImagesReview = lazy(() => import('@/pages/GeneratedImagesReview'));
 // Only keep account page and reference generation
 
 function RootRedirect() {
@@ -45,6 +46,14 @@ function App() {
                     element={
                       <ProtectedRoute requireProject>
                         <ReferenceGenerationPage />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="projects/:projectId/generated-images"
+                    element={
+                      <ProtectedRoute requireProject>
+                        <GeneratedImagesReview />
                       </ProtectedRoute>
                     }
                   />

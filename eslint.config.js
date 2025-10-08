@@ -63,6 +63,7 @@ export default tseslint.config(
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
 
       'react/react-in-jsx-scope': 'off',
+      'react/prop-types': 'off', // Disable prop-types since we use TypeScript
       camelcase: 'off',
       'spaced-comment': 'error',
       quotes: ['error', 'single', { avoidEscape: true }],
