@@ -45,7 +45,9 @@ export function useLikedImages(): UseLikedImagesResult {
   });
 
   // Create URL-only Set for backward compatibility - KISS optimization for O(1) lookup
-  const likedImageUrls = new Set(likedImages.map((img) => img.image_url));
+  // Ensure likedImages is always an array before mapping
+  const safeImages = Array.isArray(likedImages) ? likedImages : [];
+  const likedImageUrls = new Set(safeImages.map((img) => img.image_url));
 
   // Mutation for adding liked images with source tracking
   const addLikedImageMutation = useMutation({
@@ -151,7 +153,7 @@ export function useLikedImages(): UseLikedImagesResult {
 
     if (isCurrentlyLiked) {
       // Find the liked image to remove
-      const targetImage = likedImages.find((img) => img.image_url === imageUrl);
+      const targetImage = safeImages.find((img) => img.image_url === imageUrl);
       if (targetImage) {
         const removeRequest: LikedImageRemoveRequest = {
           image_path: targetImage.image_path,
@@ -164,22 +166,23 @@ export function useLikedImages(): UseLikedImagesResult {
         console.warn('Could not find source info for image, using legacy removal method');
         userPreferencesService.removeLikedImageLegacy(imageUrl).catch(console.error);
       }
+      return;
+    }
+
+    // Add image
+    if (sourceInfo) {
+      const addRequest: LikedImageRequest = {
+        image_path: sourceInfo.image_path,
+        source_type: sourceInfo.source_type,
+        source_id: sourceInfo.source_id,
+        display_name: sourceInfo.base_prompt || sourceInfo.display_name, // Use base_prompt for better UX
+        base_prompt: sourceInfo.base_prompt, // Store base_prompt for future reference
+      };
+      addLikedImageMutation.mutate(addRequest);
     } else {
-      // Add image
-      if (sourceInfo) {
-        const addRequest: LikedImageRequest = {
-          image_path: sourceInfo.image_path,
-          source_type: sourceInfo.source_type,
-          source_id: sourceInfo.source_id,
-          display_name: sourceInfo.base_prompt || sourceInfo.display_name, // Use base_prompt for better UX
-          base_prompt: sourceInfo.base_prompt, // Store base_prompt for future reference
-        };
-        addLikedImageMutation.mutate(addRequest);
-      } else {
-        // Fallback to legacy method
-        console.warn('No source info provided, using legacy add method');
-        userPreferencesService.addLikedImageLegacy(imageUrl).catch(console.error);
-      }
+      // Fallback to legacy method
+      console.warn('No source info provided, using legacy add method');
+      userPreferencesService.addLikedImageLegacy(imageUrl).catch(console.error);
     }
   };
 
@@ -198,7 +201,7 @@ export function useLikedImages(): UseLikedImagesResult {
   };
 
   return {
-    likedImages, // New format: LikedImageResponse[]
+    likedImages: safeImages, // New format: LikedImageResponse[] (always an array)
     likedImageUrls, // Backward compatibility: Set<string>
     isLoading,
     error,

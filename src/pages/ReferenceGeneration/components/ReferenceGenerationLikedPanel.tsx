@@ -40,7 +40,9 @@ export function ReferenceGenerationLikedPanel({ className }: ReferenceGeneration
         if (cancelled) {
           return;
         }
-        const mapped: ImageDetailData[] = items.map((it) => ({
+        // Ensure items is an array before mapping
+        const safeItems = Array.isArray(items) ? items : [];
+        const mapped: ImageDetailData[] = safeItems.map((it) => ({
           image_url: it.image_url,
           image_path: it.image_path,
           display_name: it.enhanced_prompt || it.base_prompt,
