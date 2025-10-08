@@ -92,7 +92,10 @@ export function PromptInput({
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    // Seems to be the best way for now according to
+    // https://webfrontend.ninja/js-input-ime-enter/
+    // eslint-disable-next-line sonarjs/deprecation
+    if (e.keyCode === 13 && !e.shiftKey) {
       e.preventDefault();
       onSubmit(prompt);
     }
