@@ -28,7 +28,7 @@ function ProjectCard(props: Props) {
       onClick={() => {
         setCurrentProjectId(project.id as UUID);
         // eslint-disable-next-line sonarjs/void-use
-        void navigate(`/projects/${project.id}/tasks`);
+        void navigate(`/projects/${project.id}/reference-generation`);
       }}
     >
       <CardHeader className="p-4 pb-2">

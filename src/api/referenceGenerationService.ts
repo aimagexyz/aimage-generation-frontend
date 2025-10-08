@@ -38,7 +38,16 @@ export const referenceGenerationService = {
       method: 'post',
       data: request,
     });
-    return response.data as GeneratedReferenceResponse[];
+    const data = response.data;
+    // Ensure we always return an array
+    if (!data) {
+      return [];
+    }
+    if (Array.isArray(data)) {
+      return data as GeneratedReferenceResponse[];
+    }
+    console.warn('Unexpected response format from generateReferences:', data);
+    return [];
   },
 
   /**
@@ -49,7 +58,16 @@ export const referenceGenerationService = {
       url: `/api/v1/reference-generation/projects/${projectId}/references` as UrlPaths,
       method: 'get',
     });
-    return response.data as GeneratedReferenceResponse[];
+    const data = response.data;
+    // Ensure we always return an array
+    if (!data) {
+      return [];
+    }
+    if (Array.isArray(data)) {
+      return data as GeneratedReferenceResponse[];
+    }
+    console.warn('Unexpected response format from listReferences:', data);
+    return [];
   },
 
   /**
@@ -88,7 +106,16 @@ export const referenceGenerationService = {
       data: form,
       headers: { 'Content-Type': 'multipart/form-data' },
     });
-    return response.data as GeneratedReferenceResponse[];
+    const data = response.data;
+    // Ensure we always return an array
+    if (!data) {
+      return [];
+    }
+    if (Array.isArray(data)) {
+      return data as GeneratedReferenceResponse[];
+    }
+    console.warn('Unexpected response format from generateReferencesFromImages:', data);
+    return [];
   },
 };
 

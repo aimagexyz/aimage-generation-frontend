@@ -28,7 +28,20 @@ export const userPreferencesService = {
       url: `${BASE_URL}/liked-images` as UrlPaths,
       method: 'get',
     });
-    return response.data as LikedImageResponse[];
+    const data = response.data;
+    // Ensure we always return an array
+    if (!data) {
+      return [];
+    }
+    if (Array.isArray(data)) {
+      return data as LikedImageResponse[];
+    }
+    // If data is an object with a liked_images property, return that
+    if (typeof data === 'object' && 'liked_images' in data && Array.isArray(data.liked_images)) {
+      return data.liked_images as LikedImageResponse[];
+    }
+    console.warn('Unexpected response format from getLikedImages:', data);
+    return [];
   },
 
   /**
