@@ -109,25 +109,6 @@ export default function GeneratedImagesReview() {
                 <h1 className="text-2xl font-bold">生成画像一覧</h1>
                 <p className="text-xs text-muted-foreground">AI生成画像をすべて閲覧・確認</p>
               </div>
-
-              {/* Compact Stats */}
-              {!error && (
-                <div className="hidden items-center gap-4 lg:flex">
-                  <div className="flex items-center gap-2 rounded-md bg-muted/50 px-3 py-1.5">
-                    <Image className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-sm font-semibold">{stats.total}</span>
-                  </div>
-                  <div className="flex items-center gap-2 rounded-md bg-muted/50 px-3 py-1.5">
-                    <TrendingUp className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-sm font-semibold">{stats.recent}</span>
-                    <span className="text-xs text-muted-foreground">過去7日間</span>
-                  </div>
-                  <div className="flex items-center gap-2 rounded-md bg-primary/10 px-3 py-1.5">
-                    <Sparkles className="h-4 w-4 text-primary" />
-                    <span className="text-sm font-semibold text-primary">{stats.filtered}</span>
-                  </div>
-                </div>
-              )}
             </div>
 
             {/* Actions */}
