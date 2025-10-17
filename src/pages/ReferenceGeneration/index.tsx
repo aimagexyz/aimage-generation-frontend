@@ -16,7 +16,6 @@ export default function ReferenceGenerationPage() {
         <div className="flex-1 flex flex-col min-w-0">
           <ChatPanel onOpenStructuredModal={() => setIsStructuredModalOpen(true)} />
         </div>
-
       </div>
 
       <StructuredInstructionModal

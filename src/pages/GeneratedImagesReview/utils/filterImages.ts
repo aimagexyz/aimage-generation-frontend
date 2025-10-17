@@ -9,10 +9,7 @@ export interface FilterState {
   searchQuery: string;
 }
 
-export function filterImages(
-  images: GeneratedReferenceResponse[],
-  filters: FilterState
-): GeneratedReferenceResponse[] {
+export function filterImages(images: GeneratedReferenceResponse[], filters: FilterState): GeneratedReferenceResponse[] {
   return images.filter((img) => {
     // Date range filter
     if (filters.dateRange.start || filters.dateRange.end) {
@@ -32,12 +29,8 @@ export function filterImages(
 
     // Tag filter (AND logic - must have all selected tags)
     if (filters.selectedTags.length > 0) {
-      const imgTags = Object.values(img.tags).filter(
-        (tag): tag is string => typeof tag === 'string'
-      );
-      const hasAllTags = filters.selectedTags.every((tag) =>
-        imgTags.includes(tag)
-      );
+      const imgTags = Object.values(img.tags).filter((tag): tag is string => typeof tag === 'string');
+      const hasAllTags = filters.selectedTags.every((tag) => imgTags.includes(tag));
       if (!hasAllTags) {
         return false;
       }
@@ -47,8 +40,7 @@ export function filterImages(
     if (filters.searchQuery) {
       const query = filters.searchQuery.toLowerCase();
       const matchPrompt =
-        img.base_prompt.toLowerCase().includes(query) ||
-        img.enhanced_prompt.toLowerCase().includes(query);
+        img.base_prompt.toLowerCase().includes(query) || img.enhanced_prompt.toLowerCase().includes(query);
       if (!matchPrompt) {
         return false;
       }
@@ -61,9 +53,7 @@ export function filterImages(
 /**
  * Extract all unique tag values from a list of images
  */
-export function extractAvailableTags(
-  images: GeneratedReferenceResponse[]
-): string[] {
+export function extractAvailableTags(images: GeneratedReferenceResponse[]): string[] {
   const tagSet = new Set<string>();
   images.forEach((img) => {
     Object.values(img.tags).forEach((tag) => {
@@ -78,9 +68,7 @@ export function extractAvailableTags(
 /**
  * Get count of images for each tag
  */
-export function getTagCounts(
-  images: GeneratedReferenceResponse[]
-): Record<string, number> {
+export function getTagCounts(images: GeneratedReferenceResponse[]): Record<string, number> {
   const counts: Record<string, number> = {};
   images.forEach((img) => {
     Object.values(img.tags).forEach((tag) => {
@@ -91,4 +79,3 @@ export function getTagCounts(
   });
   return counts;
 }
-

@@ -198,8 +198,9 @@ export function PromptInput({
       >
         <TextArea
           placeholder="プロンプトを入力するか、画像を添付してください"
-          className={`min-h-[44px] resize-none rounded-lg bg-gray-50 p-3 pr-20 text-sm transition-all duration-200 dark:bg-gray-800 border-0 focus:border focus:border-purple-400 focus:bg-white dark:focus:bg-gray-900 ${isExpanded ? 'min-h-[88px]' : ''
-            } ${showSuggestions ? 'border-2 border-purple-500' : ''}`}
+          className={`min-h-[44px] resize-none rounded-lg bg-gray-50 p-3 pr-20 text-sm transition-all duration-200 dark:bg-gray-800 border-0 focus:border focus:border-purple-400 focus:bg-white dark:focus:bg-gray-900 ${
+            isExpanded ? 'min-h-[88px]' : ''
+          } ${showSuggestions ? 'border-2 border-purple-500' : ''}`}
           value={prompt}
           onChange={(e) => onPromptChange(e.target.value)}
           onKeyDown={handleKeyDown}
@@ -292,7 +293,10 @@ export function PromptInput({
         <div className="flex items-center gap-2 overflow-x-auto pb-1">
           <div className="flex items-center gap-2">
             {promptImages.map((url, idx) => (
-              <div key={`${url}-${idx}`} className="relative group h-12 w-12 flex-shrink-0 rounded-md overflow-hidden border border-gray-200 dark:border-gray-700">
+              <div
+                key={`${url}-${idx}`}
+                className="relative group h-12 w-12 flex-shrink-0 rounded-md overflow-hidden border border-gray-200 dark:border-gray-700"
+              >
                 <img src={url} alt={`attached-${idx + 1}`} className="h-full w-full object-cover" />
                 <button
                   className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-white text-gray-700 shadow border border-gray-200 opacity-0 group-hover:opacity-100 transition"
@@ -312,84 +316,88 @@ export function PromptInput({
 
       {/* Compact controls row with tags dropdown */}
       <div className="flex items-center justify-between gap-2">
-        {(!promptImages || promptImages.length === 0) ? <div className="flex items-center gap-2 flex-1 min-w-0">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={onOpenStructuredModal}
-            disabled={isLoading}
-            className="h-8 text-xs"
-          >
-            <ImageIcon className="mr-1 h-3.5 w-3.5" />
-            ヒント
-            {allTags.length > 0 && (
-              <Badge
-                variant="secondary"
-                className="ml-1.5 h-4 w-4 p-0 text-xs rounded-full flex items-center justify-center"
-              >
-                {allTags.length}
-              </Badge>
-            )}
-          </Button>
+        {!promptImages || promptImages.length === 0 ? (
+          <div className="flex items-center gap-2 flex-1 min-w-0">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={onOpenStructuredModal}
+              disabled={isLoading}
+              className="h-8 text-xs"
+            >
+              <ImageIcon className="mr-1 h-3.5 w-3.5" />
+              ヒント
+              {allTags.length > 0 && (
+                <Badge
+                  variant="secondary"
+                  className="ml-1.5 h-4 w-4 p-0 text-xs rounded-full flex items-center justify-center"
+                >
+                  {allTags.length}
+                </Badge>
+              )}
+            </Button>
 
-          {/* Tags dropdown */}
-          {allTags.length > 0 && (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm" className="h-8 text-xs gap-1" disabled={isLoading}>
-                  <span>選択中のタグ</span>
-                  <ChevronDown className="h-3 w-3" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" className="w-80 max-h-64 overflow-y-auto">
-                <div className="p-2 border-b border-gray-200 dark:border-gray-700">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">選択中のタグ</span>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="h-6 text-xs text-red-500 hover:text-red-600"
-                      onClick={() => {
-                        Object.keys(structuredSelections).forEach((category) => {
-                          onSelectionRemove(category);
-                        });
-                      }}
-                    >
-                      すべてクリア
-                    </Button>
-                  </div>
-                </div>
-                <div className="p-1">
-                  {allTags.map((tag) => (
-                    <DropdownMenuItem
-                      key={tag.key}
-                      className="flex items-center justify-between group cursor-pointer p-2 hover:bg-gray-50 dark:hover:bg-gray-800 rounded"
-                      onSelect={(e) => e.preventDefault()}
-                    >
-                      <div className="flex items-center gap-2 flex-1 min-w-0">
-                        <Badge variant="secondary" className="text-xs px-2 py-1 h-auto font-normal">
-                          <span className="text-gray-500">{tag.categoryDisplay}:</span>
-                          <span className="ml-1 font-semibold">{tag.item}</span>
-                        </Badge>
-                      </div>
+            {/* Tags dropdown */}
+            {allTags.length > 0 && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="sm" className="h-8 text-xs gap-1" disabled={isLoading}>
+                    <span>選択中のタグ</span>
+                    <ChevronDown className="h-3 w-3" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="w-80 max-h-64 overflow-y-auto">
+                  <div className="p-2 border-b border-gray-200 dark:border-gray-700">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">選択中のタグ</span>
                       <Button
                         variant="ghost"
                         size="sm"
-                        className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity text-red-500 hover:text-red-600"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onSelectionRemove(tag.category);
+                        className="h-6 text-xs text-red-500 hover:text-red-600"
+                        onClick={() => {
+                          Object.keys(structuredSelections).forEach((category) => {
+                            onSelectionRemove(category);
+                          });
                         }}
                       >
-                        <X className="h-3 w-3" />
+                        すべてクリア
                       </Button>
-                    </DropdownMenuItem>
-                  ))}
-                </div>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          )}
-        </div> : <div className="flex items-center gap-2 flex-1 min-w-0" />}
+                    </div>
+                  </div>
+                  <div className="p-1">
+                    {allTags.map((tag) => (
+                      <DropdownMenuItem
+                        key={tag.key}
+                        className="flex items-center justify-between group cursor-pointer p-2 hover:bg-gray-50 dark:hover:bg-gray-800 rounded"
+                        onSelect={(e) => e.preventDefault()}
+                      >
+                        <div className="flex items-center gap-2 flex-1 min-w-0">
+                          <Badge variant="secondary" className="text-xs px-2 py-1 h-auto font-normal">
+                            <span className="text-gray-500">{tag.categoryDisplay}:</span>
+                            <span className="ml-1 font-semibold">{tag.item}</span>
+                          </Badge>
+                        </div>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity text-red-500 hover:text-red-600"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onSelectionRemove(tag.category);
+                          }}
+                        >
+                          <X className="h-3 w-3" />
+                        </Button>
+                      </DropdownMenuItem>
+                    ))}
+                  </div>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
+          </div>
+        ) : (
+          <div className="flex items-center gap-2 flex-1 min-w-0" />
+        )}
 
         {/* Compact settings and status */}
         <div className="flex items-center gap-2 text-xs">

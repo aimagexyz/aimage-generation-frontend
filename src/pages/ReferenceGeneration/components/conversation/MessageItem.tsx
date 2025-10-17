@@ -72,22 +72,22 @@ function MessageItemComponent({
             <div className="mt-4 space-y-3">
               <div className={`grid gap-3 ${getGridLayout(message.images?.length || 0)}`}>
                 {message.images?.map((img, i) => (
-                    <div
-                      key={i}
-                      className={`relative overflow-hidden transition-all duration-200 shadow-md group/image rounded-xl hover:shadow-xl bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-700 ${
-                        enableImageInteractions ? 'cursor-pointer hover:scale-105' : ''
-                      }`}
-                      onClick={() => handleImageClick(img, message, i)}
-                    >
-                      <AnimatedImage src={img} alt={`Generated image ${i + 1}`} aspectRatio={message.aspect_ratio} />
-                      {enableImageInteractions && (
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover/image:opacity-100 transition-all duration-200 rounded-xl z-10 flex items-center justify-center">
-                          <div className="bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm rounded-lg px-3 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 shadow-lg">
-                            詳細表示
-                          </div>
+                  <div
+                    key={i}
+                    className={`relative overflow-hidden transition-all duration-200 shadow-md group/image rounded-xl hover:shadow-xl bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-700 ${
+                      enableImageInteractions ? 'cursor-pointer hover:scale-105' : ''
+                    }`}
+                    onClick={() => handleImageClick(img, message, i)}
+                  >
+                    <AnimatedImage src={img} alt={`Generated image ${i + 1}`} aspectRatio={message.aspect_ratio} />
+                    {enableImageInteractions && (
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover/image:opacity-100 transition-all duration-200 rounded-xl z-10 flex items-center justify-center">
+                        <div className="bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm rounded-lg px-3 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 shadow-lg">
+                          詳細表示
                         </div>
-                      )}
-                    </div>
+                      </div>
+                    )}
+                  </div>
                 ))}
               </div>
               {showTimestamps && (

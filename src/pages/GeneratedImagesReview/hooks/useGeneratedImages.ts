@@ -1,9 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 
-import {
-  type GeneratedReferenceResponse,
-  referenceGenerationService,
-} from '@/api/referenceGenerationService';
+import { type GeneratedReferenceResponse, referenceGenerationService } from '@/api/referenceGenerationService';
 
 export type { GeneratedReferenceResponse };
 
@@ -16,4 +13,3 @@ export function useGeneratedImages(projectId: string) {
     staleTime: 1000 * 60 * 5, // 5 minutes cache
   });
 }
-

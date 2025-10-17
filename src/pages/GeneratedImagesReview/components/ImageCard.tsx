@@ -13,15 +13,13 @@ interface ImageCardProps {
 
 export function ImageCard({ image, onClick }: ImageCardProps) {
   const [imageLoaded, setImageLoaded] = useState(false);
-  
+
   const formattedDate = new Date(image.created_at).toLocaleDateString('ja-JP', {
     month: 'short',
     day: 'numeric',
   });
 
-  const tags = Object.values(image.tags).filter(
-    (tag): tag is string => typeof tag === 'string'
-  );
+  const tags = Object.values(image.tags).filter((tag): tag is string => typeof tag === 'string');
 
   return (
     <Card
@@ -39,18 +37,16 @@ export function ImageCard({ image, onClick }: ImageCardProps) {
             imageLoaded ? 'scale-100 blur-0' : 'scale-110 blur-sm'
           } group-hover:scale-110`}
         />
-        
+
         {/* Overlay on hover */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100">
           <div className="absolute bottom-0 left-0 right-0 p-4 space-y-2">
             {/* Prompt preview */}
             <div className="flex items-start gap-2">
               <Sparkles className="h-4 w-4 flex-shrink-0 text-primary mt-0.5" />
-              <p className="line-clamp-2 text-sm text-white font-medium">
-                {image.base_prompt}
-              </p>
+              <p className="line-clamp-2 text-sm text-white font-medium">{image.base_prompt}</p>
             </div>
-            
+
             {/* Tags */}
             {tags.length > 0 && (
               <div className="flex flex-wrap gap-1">
@@ -85,4 +81,3 @@ export function ImageCard({ image, onClick }: ImageCardProps) {
     </Card>
   );
 }
-

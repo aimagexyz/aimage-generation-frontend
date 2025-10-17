@@ -3,12 +3,7 @@ import { useState } from 'react';
 
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/Dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/Dialog';
 import { Separator } from '@/components/ui/Separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs';
 import { useToast } from '@/components/ui/use-toast';
@@ -21,11 +16,7 @@ interface ImageDetailModalProps {
   readonly onClose: () => void;
 }
 
-export function ImageDetailModal({
-  image,
-  open,
-  onClose,
-}: ImageDetailModalProps) {
+export function ImageDetailModal({ image, open, onClose }: ImageDetailModalProps) {
   const { toast } = useToast();
   const [copiedField, setCopiedField] = useState<string | null>(null);
 
@@ -78,9 +69,7 @@ export function ImageDetailModal({
     minute: '2-digit',
   });
 
-  const tags = Object.entries(image.tags).filter(
-    ([, value]) => typeof value === 'string'
-  );
+  const tags = Object.entries(image.tags).filter(([, value]) => typeof value === 'string');
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
@@ -89,12 +78,7 @@ export function ImageDetailModal({
           <div className="flex items-center justify-between">
             <DialogTitle className="text-2xl">生成画像の詳細</DialogTitle>
             <div className="flex items-center gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleDownload}
-                className="gap-2"
-              >
+              <Button variant="outline" size="sm" onClick={handleDownload} className="gap-2">
                 <Download className="h-4 w-4" />
                 ダウンロード
               </Button>
@@ -113,11 +97,7 @@ export function ImageDetailModal({
             {/* Preview Tab */}
             <TabsContent value="preview" className="space-y-4 mt-6">
               <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-muted/50 to-muted">
-                <img
-                  src={image.image_url}
-                  alt={image.base_prompt}
-                  className="w-full object-contain max-h-[60vh]"
-                />
+                <img src={image.image_url} alt={image.base_prompt} className="w-full object-contain max-h-[60vh]" />
               </div>
 
               {/* Quick Info */}
@@ -169,9 +149,7 @@ export function ImageDetailModal({
                     {copiedField === '基本プロンプト' ? 'コピー済み' : 'コピー'}
                   </Button>
                 </div>
-                <div className="whitespace-pre-wrap rounded-lg border bg-muted/50 p-4 text-sm">
-                  {image.base_prompt}
-                </div>
+                <div className="whitespace-pre-wrap rounded-lg border bg-muted/50 p-4 text-sm">{image.base_prompt}</div>
               </div>
 
               <Separator />
@@ -186,9 +164,7 @@ export function ImageDetailModal({
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() =>
-                      copyToClipboard(image.enhanced_prompt, '拡張プロンプト')
-                    }
+                    onClick={() => copyToClipboard(image.enhanced_prompt, '拡張プロンプト')}
                     className="gap-2"
                   >
                     {copiedField === '拡張プロンプト' ? (
@@ -229,9 +205,7 @@ export function ImageDetailModal({
                 <div className="grid gap-4">
                   <div className="grid grid-cols-[120px_1fr] items-center gap-4">
                     <span className="text-sm font-medium">ID</span>
-                    <code className="rounded bg-muted px-2 py-1 text-xs">
-                      {image.id}
-                    </code>
+                    <code className="rounded bg-muted px-2 py-1 text-xs">{image.id}</code>
                   </div>
                   <Separator />
                   <div className="grid grid-cols-[120px_1fr] items-center gap-4">
@@ -241,16 +215,12 @@ export function ImageDetailModal({
                   <Separator />
                   <div className="grid grid-cols-[120px_1fr] items-center gap-4">
                     <span className="text-sm font-medium">保存パス</span>
-                    <code className="rounded bg-muted px-2 py-1 text-xs break-all">
-                      {image.image_path}
-                    </code>
+                    <code className="rounded bg-muted px-2 py-1 text-xs break-all">{image.image_path}</code>
                   </div>
                   <Separator />
                   <div className="grid grid-cols-[120px_1fr] items-center gap-4">
                     <span className="text-sm font-medium">画像URL</span>
-                    <code className="rounded bg-muted px-2 py-1 text-xs break-all">
-                      {image.image_url}
-                    </code>
+                    <code className="rounded bg-muted px-2 py-1 text-xs break-all">{image.image_url}</code>
                   </div>
                 </div>
               </div>
@@ -261,4 +231,3 @@ export function ImageDetailModal({
     </Dialog>
   );
 }
-

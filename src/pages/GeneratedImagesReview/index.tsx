@@ -9,16 +9,8 @@ import { ActiveFilters } from './components/ActiveFilters';
 import { FilterPanel } from './components/FilterPanel';
 import { ImageDetailModal } from './components/ImageDetailModal';
 import { ImageGallery } from './components/ImageGallery';
-import {
-  GeneratedReferenceResponse,
-  useGeneratedImages,
-} from './hooks/useGeneratedImages';
-import {
-  extractAvailableTags,
-  filterImages,
-  FilterState,
-  getTagCounts,
-} from './utils/filterImages';
+import { GeneratedReferenceResponse, useGeneratedImages } from './hooks/useGeneratedImages';
+import { extractAvailableTags, filterImages, FilterState, getTagCounts } from './utils/filterImages';
 
 export default function GeneratedImagesReview() {
   const { projectId } = useParams<{ projectId: string }>();
@@ -27,13 +19,10 @@ export default function GeneratedImagesReview() {
     selectedTags: [],
     searchQuery: '',
   });
-  const [selectedImage, setSelectedImage] =
-    useState<GeneratedReferenceResponse | null>(null);
+  const [selectedImage, setSelectedImage] = useState<GeneratedReferenceResponse | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
 
-  const { data: images, isLoading, error, refetch } = useGeneratedImages(
-    projectId || ''
-  );
+  const { data: images, isLoading, error, refetch } = useGeneratedImages(projectId || '');
 
   // Extract available tags and counts from all images
   const availableTags = useMemo(() => {
@@ -47,8 +36,8 @@ export default function GeneratedImagesReview() {
   // Apply filters to images
   const filteredImages = useMemo(() => {
     if (!images) {
-return [];
-}
+      return [];
+    }
     return filterImages(images, filters);
   }, [images, filters]);
 
@@ -99,8 +88,7 @@ return [];
     const weekAgo = new Date(today);
     weekAgo.setDate(weekAgo.getDate() - 7);
 
-    const recentCount =
-      images?.filter((img) => new Date(img.created_at) >= weekAgo).length || 0;
+    const recentCount = images?.filter((img) => new Date(img.created_at) >= weekAgo).length || 0;
 
     return {
       total: images?.length || 0,
@@ -119,11 +107,9 @@ return [];
             <div className="flex items-center gap-6">
               <div>
                 <h1 className="text-2xl font-bold">生成画像一覧</h1>
-                <p className="text-xs text-muted-foreground">
-                  AI生成画像をすべて閲覧・確認
-                </p>
+                <p className="text-xs text-muted-foreground">AI生成画像をすべて閲覧・確認</p>
               </div>
-              
+
               {/* Compact Stats */}
               {!error && (
                 <div className="hidden items-center gap-4 lg:flex">
@@ -146,13 +132,7 @@ return [];
 
             {/* Actions */}
             <div className="flex items-center gap-2">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => void refetch()}
-                disabled={isLoading}
-                className="gap-2"
-              >
+              <Button variant="ghost" size="sm" onClick={() => void refetch()} disabled={isLoading} className="gap-2">
                 <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
                 更新
               </Button>
@@ -213,12 +193,7 @@ return [];
       </div>
 
       {/* Detail Modal */}
-      <ImageDetailModal
-        image={selectedImage}
-        open={modalOpen}
-        onClose={handleModalClose}
-      />
+      <ImageDetailModal image={selectedImage} open={modalOpen} onClose={handleModalClose} />
     </div>
   );
 }
-

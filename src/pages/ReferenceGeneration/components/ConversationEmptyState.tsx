@@ -17,7 +17,7 @@ import { useImageGenContext } from '../contexts/ImageGenContext';
 
 interface ConversationEmptyStateProps {
   title?: string;
-  icon?: React.ComponentType<{ className?: string; }>;
+  icon?: React.ComponentType<{ className?: string }>;
   className?: string;
 }
 

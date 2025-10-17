@@ -9,12 +9,7 @@ interface StatsCardProps {
   readonly description?: string;
 }
 
-export function StatsCard({
-  icon: Icon,
-  label,
-  value,
-  description,
-}: StatsCardProps) {
+export function StatsCard({ icon: Icon, label, value, description }: StatsCardProps) {
   return (
     <Card className="p-4 transition-all hover:shadow-md">
       <div className="flex items-center gap-3">
@@ -24,12 +19,9 @@ export function StatsCard({
         <div className="flex-1">
           <p className="text-sm text-muted-foreground">{label}</p>
           <p className="text-2xl font-bold">{value}</p>
-          {description && (
-            <p className="text-xs text-muted-foreground">{description}</p>
-          )}
+          {description && <p className="text-xs text-muted-foreground">{description}</p>}
         </div>
       </div>
     </Card>
   );
 }
-

@@ -13,12 +13,7 @@ interface ImageGalleryProps {
 
 const SKELETON_IDS = Array.from({ length: 10 }, () => crypto.randomUUID());
 
-export function ImageGallery({
-  images,
-  isLoading,
-  isFiltered,
-  onImageClick,
-}: ImageGalleryProps) {
+export function ImageGallery({ images, isLoading, isFiltered, onImageClick }: ImageGalleryProps) {
   if (isLoading) {
     return (
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
@@ -39,13 +34,8 @@ export function ImageGallery({
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
       {images.map((image) => (
-        <ImageCard
-          key={image.id}
-          image={image}
-          onClick={() => onImageClick(image)}
-        />
+        <ImageCard key={image.id} image={image} onClick={() => onImageClick(image)} />
       ))}
     </div>
   );
 }
-

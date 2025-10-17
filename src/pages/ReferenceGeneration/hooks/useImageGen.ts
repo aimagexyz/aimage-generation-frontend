@@ -330,7 +330,7 @@ export function useImageGen() {
         // Update job state
         updateJobState(jobId, 'completed', 100);
       } catch (_e) {
-        const err = _e as { name?: string; message?: string; };
+        const err = _e as { name?: string; message?: string };
         handleGenerationError(err, jobId);
       } finally {
         setIsLoading(false);
@@ -405,13 +405,13 @@ export function useImageGen() {
   const allImages = conversation.flatMap((msg) =>
     msg.images
       ? msg.images.map((img, index) => ({
-        src: img,
-        aspect_ratio: msg.aspect_ratio || '1:1',
-        messageId: msg.id,
-        timestamp: msg.metadata?.timestamp || Date.now(),
-        settings: msg.metadata?.settings || detailedSettings,
-        index,
-      }))
+          src: img,
+          aspect_ratio: msg.aspect_ratio || '1:1',
+          messageId: msg.id,
+          timestamp: msg.metadata?.timestamp || Date.now(),
+          settings: msg.metadata?.settings || detailedSettings,
+          index,
+        }))
       : [],
   );
 

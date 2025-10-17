@@ -162,7 +162,7 @@ const mapToCamera = (value: string): string => {
 // Helper function to map existing DetailedSettings to new API format
 export const mapSettingsToRequest = (
   basePrompt: string,
-  detailedSettings: { number_of_images: number; aspect_ratio: string; },
+  detailedSettings: { number_of_images: number; aspect_ratio: string },
   structuredSelections: Record<string, string>,
   negativePrompt?: string,
 ): GenerateRequest => {

@@ -21,14 +21,11 @@ export function ActiveFilters({
   onClearAll,
 }: ActiveFiltersProps) {
   const hasFilters =
-    filters.selectedTags.length > 0 ||
-    filters.dateRange.start ||
-    filters.dateRange.end ||
-    filters.searchQuery;
+    filters.selectedTags.length > 0 || filters.dateRange.start || filters.dateRange.end || filters.searchQuery;
 
   if (!hasFilters) {
-return null;
-}
+    return null;
+  }
 
   return (
     <div className="flex flex-wrap items-center gap-2">
@@ -36,17 +33,9 @@ return null;
 
       {/* Search Query */}
       {filters.searchQuery && (
-        <Badge
-          variant="secondary"
-          className="gap-1 pl-3 pr-1"
-        >
+        <Badge variant="secondary" className="gap-1 pl-3 pr-1">
           検索: {filters.searchQuery}
-          <Button
-            variant="ghost"
-            size="sm"
-            className="h-4 w-4 p-0 hover:bg-transparent"
-            onClick={onClearSearch}
-          >
+          <Button variant="ghost" size="sm" className="h-4 w-4 p-0 hover:bg-transparent" onClick={onClearSearch}>
             <X className="h-3 w-3" />
           </Button>
         </Badge>
@@ -54,18 +43,10 @@ return null;
 
       {/* Date Range */}
       {(filters.dateRange.start || filters.dateRange.end) && (
-        <Badge
-          variant="secondary"
-          className="gap-1 pl-3 pr-1"
-        >
+        <Badge variant="secondary" className="gap-1 pl-3 pr-1">
           日付: {filters.dateRange.start?.toLocaleDateString('ja-JP')} -{' '}
           {filters.dateRange.end?.toLocaleDateString('ja-JP')}
-          <Button
-            variant="ghost"
-            size="sm"
-            className="h-4 w-4 p-0 hover:bg-transparent"
-            onClick={onClearDateRange}
-          >
+          <Button variant="ghost" size="sm" className="h-4 w-4 p-0 hover:bg-transparent" onClick={onClearDateRange}>
             <X className="h-3 w-3" />
           </Button>
         </Badge>
@@ -73,11 +54,7 @@ return null;
 
       {/* Tags */}
       {filters.selectedTags.map((tag) => (
-        <Badge
-          key={tag}
-          variant="default"
-          className="gap-1 pl-3 pr-1"
-        >
+        <Badge key={tag} variant="default" className="gap-1 pl-3 pr-1">
           {tag}
           <Button
             variant="ghost"
@@ -91,15 +68,9 @@ return null;
       ))}
 
       {/* Clear All */}
-      <Button
-        variant="ghost"
-        size="sm"
-        onClick={onClearAll}
-        className="h-7 text-xs"
-      >
+      <Button variant="ghost" size="sm" onClick={onClearAll} className="h-7 text-xs">
         すべてクリア
       </Button>
     </div>
   );
 }
-
