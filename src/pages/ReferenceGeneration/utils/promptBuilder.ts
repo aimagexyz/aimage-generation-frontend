@@ -121,10 +121,5 @@ export const validatePrompt = (promptText: string): { isValid: boolean; suggesti
     return { isValid: false, suggestion: 'プロンプトを入力してください' };
   }
 
-  // Check for common issues
-  if (promptText.includes('NSFW') || promptText.includes('不適切')) {
-    return { isValid: false, suggestion: '適切な内容に変更してください' };
-  }
-
   return { isValid: true };
 };
