@@ -274,7 +274,12 @@ const MessageItem = memo(
             <div className="mt-4 space-y-3">
               <div className={`grid gap-3 ${getGridLayout(message.images?.length || 0)}`}>
                 {message.images?.map((img, i) => (
-                    <AnimatedImage key={i} src={img} alt={`Generated image ${i + 1}`} aspectRatio={message.aspect_ratio} />
+                  <AnimatedImage
+                    key={i}
+                    src={img}
+                    alt={`Generated image ${i + 1}`}
+                    aspectRatio={message.aspect_ratio}
+                  />
                 ))}
               </div>
               {showTimestamps && (
@@ -327,7 +332,7 @@ function ConversationLayoutComponent({
   isLoading,
   isTyping = false,
   retryCount = 0,
-  showTimestamps = true,
+  showTimestamps = false,
 }: ConversationLayoutProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
 
