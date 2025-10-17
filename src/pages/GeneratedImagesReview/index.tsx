@@ -1,4 +1,4 @@
-import { AlertCircle, Image, RefreshCw, Sparkles, TrendingUp } from 'lucide-react';
+import { AlertCircle, RefreshCw } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
@@ -81,24 +81,8 @@ export default function GeneratedImagesReview() {
     filters.searchQuery
   );
 
-  // Calculate stats
-  const stats = useMemo(() => {
-    const now = new Date();
-    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    const weekAgo = new Date(today);
-    weekAgo.setDate(weekAgo.getDate() - 7);
-
-    const recentCount = images?.filter((img) => new Date(img.created_at) >= weekAgo).length || 0;
-
-    return {
-      total: images?.length || 0,
-      recent: recentCount,
-      filtered: filteredImages.length,
-    };
-  }, [images, filteredImages]);
-
   return (
-    <div className="flex h-screen flex-col overflow-hidden bg-gradient-to-b from-background to-muted/20">
+    <div className="flex h-full flex-col overflow-hidden bg-gradient-to-b from-background to-muted/20">
       {/* Compact Header */}
       <div className="flex-shrink-0 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container mx-auto px-4 py-3">
