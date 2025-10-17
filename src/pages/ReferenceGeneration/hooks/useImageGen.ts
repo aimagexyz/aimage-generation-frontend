@@ -278,7 +278,8 @@ export function useImageGen() {
       }
 
       // Build the complete prompt
-      const fullPrompt = buildPrompt(promptToSubmit, structuredSelections);
+      const fullPrompt =
+        promptImageFiles.length > 0 ? promptToSubmit : buildPrompt(promptToSubmit, structuredSelections);
 
       // Create job tracking
       const jobId = `job-${Date.now()}`;
